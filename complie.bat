@@ -1,3 +1,3 @@
-gcc main.c parse/*.c
+gcc -g main.c parse/*.c
 
 pause

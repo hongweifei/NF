@@ -26,10 +26,11 @@ void StrSetChar(char *str, int ch)
 void StrAddChar(char *str, int ch)
 {
     unsigned int length = strlen(str);//不算\0
-	str = (char*)realloc(str,sizeof(char) * (length + 1 + 1));
-
+	str = (char*)realloc(str,sizeof(char) * (length + 2));
+	
 	str[length] = (char)ch;
 	str[length + 1] = '\0';
+
 }
 
 
