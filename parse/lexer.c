@@ -180,9 +180,6 @@ Token *GetNextToken(FILE *fp)
             line++;
             cols = 0;
             continue;
-
-        case ';':
-            return TokenCreate(TK_SEMICOLON,";",line,cols);
         
         default:
             break;
