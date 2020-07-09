@@ -1,36 +1,24 @@
 
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-
-void StrSetStr(char *str, const char *text)
-{
-    unsigned int length = strlen(text);
-	str = (char*)malloc(sizeof(char) * length);
-
-	strcpy(str,text);
-}
 
 
 
-void StrSetChar(char *str, int ch)
-{
-    str = (char*)calloc(1,sizeof(char));
-	sprintf(str,"%c",ch);
-}
+#ifndef _STR_HEAD_
+#define _STR_HEAD_
 
 
 
-void StrAddChar(char *str, int ch)
-{
-    unsigned int length = strlen(str);//不算\0
-	str = (char*)realloc(str,sizeof(char) * (length + 2));
-	
-	str[length] = (char)ch;
-	str[length + 1] = '\0';
-
-}
+void StrSetStr(char *str, const char *text);
+void StrSetChar(char *str, int ch);
+void StrAddChar(char *str, int ch);
 
 
+
+int NumDigits(int n);//取数字个数
+char *ItoA(int number);//十进制
+
+
+
+
+
+#endif //_STR_HEAD_

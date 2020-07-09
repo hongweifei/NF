@@ -58,6 +58,7 @@ BOOL IsSymbol(int ch)
     case '>':
     case '.':
     case '&':
+    case '|':
     case '(':
     case ')':
     case '[':
@@ -181,10 +182,10 @@ Token *GetNextToken(FILE *fp)
             cols = 0;
             continue;
 
-        /*
+        
         case ';':
             return TokenCreate(TK_SEMICOLON,";",line,cols);
-        */
+        
         
         default:
             break;
@@ -219,13 +220,82 @@ Token *GetNextToken(FILE *fp)
     }
     
 
+    
     if (IsSymbol(ch))
     {
         //sprintf(value,"%c",ch);
+        //StrAddChar(value,ch);
+        //return TokenCreate(ch,value,line,cols);
+
+        int prev = ch;
+
+
+        type = ch;
         StrAddChar(value,ch);
-        return TokenCreate(ch,value,line,cols);
+
+
+        if (ch == '.' && NextIsAppointString(fp,"..",FALSE))
+        {
+            cols += 2;
+            type = TK_ELLIPSIS;
+            StrAddChar(value,'.');
+            StrAddChar(value,'.');
+        }
+    
+
+        while(1)
+        {
+            ch = fgetc(fp);
+            cols++;
+
+            switch (ch)
+            {
+            case '='://==, >=, <=, !=
+                if (prev == '=' || prev == '!' || prev == '>' || prev == '<')
+                    StrAddChar(value,ch);
+                else
+                {
+                    cols--;
+                    fseek(fp,-1L,SEEK_CUR);
+                }
+                
+                if (prev == '=')
+                    type = TK_EQ;
+                else if (prev == '!')
+                    type = TK_NEQ;
+                else if (prev == '>')
+                    type = TK_GEQ;
+                else if (prev == '<')
+                    type = TK_LEQ;
+
+                break;
+            
+            case '>'://->
+                if (prev == '-')
+                {
+                    type = TK_POINTSTO;
+                    StrAddChar(value,ch);
+                }
+                else
+                {
+                    cols--;
+                    fseek(fp,-1L,SEEK_CUR);
+                }
+                break;
+
+            default:
+                cols--;
+                fseek(fp,-1L,SEEK_CUR);
+                break;
+            }
+
+            break;
+        }
+        
+        return TokenCreate(type,value,line,cols);
     }
     
+
 
     if (IsLetter(ch) || ch == '_')
     {

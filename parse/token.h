@@ -22,6 +22,7 @@ typedef enum
     TK_POINTSTO = 11582,            // -> 
     TK_DOT = '.',                   // .  
     TK_AND = '&',                   // &   地址与运算符
+    TK_OR = '|',                    // |
 
     TK_OPENPA = '(',                // (   左圆括号
     TK_CLOSEPA = ')',               // )   有圆括号

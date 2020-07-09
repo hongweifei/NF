@@ -1,16 +1,41 @@
 
+
+
 int main(int argc,char *argv[])
 {
-	short;
-	int;
-	long;
-	float;
-	double;
-	char;
-	string;
-	.;
-	...;
-	print("ƒ„∫√ ¿ΩÁ£°");
+	short a = 1;
+	int b = 2;
+	long c = 3;
+	float d = 0;
+	double e = 0;
+	char f = 'c';
+	string g = "test";
+	print("‰Ω†Â•Ω‰∏ñÁïåÔºÅ");
 	print("HelloWorld!");
 	return 0;
 }
+
+
+void print()
+{
+	;;;;;
+}
+
+
+typedef enum
+{
+    TK_PLUS = '+',                 
+    TK_MINUS = '-',                
+    TK_STAR = '*',                 
+    TK_DIVIDE = '/',              
+    TK_MOD = '%',                  
+    TK_EQ = 15677,                 
+    TK_NEQ = 8509,                 
+    TK_LT = '<',                   
+    TK_LEQ = 15421,                
+    TK_GT = '>',                   
+    TK_GEQ = 15933,              
+}TokenCode;
+
+
+
