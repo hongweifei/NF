@@ -23,4 +23,7 @@ BOOL NextIsAppointString(FILE* fp, const char *str, BOOL if_is_fp_back);
 
 //BOOL NextIsChineseCharacter(FILE *fp);//下一个字是否是汉字
 
-Token *GetNextToken(FILE *fp);
+Token *GetToken(FILE *fp);
+TokenStream *Lex(FILE *fp);
+
+

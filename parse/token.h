@@ -1,6 +1,13 @@
 
-#pragma once
 
+
+
+
+#include <stdio.h>
+
+
+#ifndef TOKEN_HEAD
+#define TOKEN_HEAD
 
 
 
@@ -56,13 +63,22 @@ typedef enum
 }TokenCode;
 
 
-typedef struct
+typedef struct __token__
 {
     TokenCode type;
 	char *value;
     int line;
     int cols;
 }Token;
+
+
+
+typedef struct
+{
+    Token **token;
+    unsigned int count;
+}TokenStream;
+
 
 
 
@@ -80,3 +96,29 @@ void TokenAddChar(Token *token,int ch);
 
 
 void TokenPrint(Token *token);
+void TokenWrite(Token *token,FILE *fp);
+
+
+
+
+
+TokenStream *TokenStreamInit();
+
+void TokenStreamAppend(TokenStream *stream,Token *token);
+Token *TokenStreamGetItem(TokenStream *stream,unsigned int index);
+Token **TokenStreamGetAllToken(TokenStream *stream);
+
+
+void TokenStreamTokenPrint(TokenStream *stream,unsigned int index);
+void TokenStreamTokenWrite(TokenStream *stream,unsigned int index,FILE *fp);
+
+void TokenStreamTokensPrint(TokenStream *stream);
+void TokenStreamTokensWrite(TokenStream *stream,FILE *fp);
+
+
+
+
+#endif //TOKEN_HEAD
+
+
+

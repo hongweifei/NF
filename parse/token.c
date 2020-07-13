@@ -1,5 +1,6 @@
 
 
+#include "../str.h"
 #include "token.h"
 #include "lexer.h"
 #include <stdio.h>
@@ -96,5 +97,93 @@ void TokenPrint(Token *token)
 	printf("line: %d\n",token->line);
 	printf("cols: %d\n\n",token->cols);
 }
+
+
+void TokenWrite(Token *token,FILE *fp)
+{
+	fputs("Type:",fp);
+	fputs(IToA(token->type),fp);
+	fputc('\n',fp);
+
+	fputs("Value:",fp);
+	fputs(token->value,fp);
+	fputc('\n',fp);
+
+	fputs("Line:",fp);
+	fputs(IToA(token->line),fp);
+	fputc('\n',fp);
+
+	fputs("Cols:",fp);
+	fputs(IToA(token->cols),fp);
+	fputs("\n\n",fp);
+}
+
+
+
+
+TokenStream *TokenStreamInit()
+{
+	TokenStream *stream = (TokenStream*)malloc(sizeof(TokenStream));
+	
+	stream->token = (Token**)calloc(1,sizeof(Token*));
+	stream->token[0] = NULL;
+	stream->count = 0;
+
+	return stream;
+}
+
+
+void TokenStreamAppend(TokenStream *stream,Token *token)
+{
+	stream->count++;
+	stream->token = (Token**)realloc(stream->token,sizeof(Token*) * stream->count);
+	stream->token[stream->count - 1] = token;
+}
+
+
+
+Token *TokenStreamGetItem(TokenStream *stream,unsigned int index)
+{
+	return stream->token[index];
+}
+
+
+Token **TokenStreamGetAllToken(TokenStream *stream)
+{
+	return stream->token;
+}
+
+
+
+void TokenStreamTokenPrint(TokenStream *stream,unsigned int index)
+{
+	Token *token = stream->token[index];
+	TokenPrint(token);
+}
+
+
+void TokenStreamTokenWrite(TokenStream *stream,unsigned int index,FILE *fp)
+{
+	Token *token = stream->token[index];
+	TokenWrite(token,fp);
+}
+
+
+void TokenStreamTokensPrint(TokenStream *stream)
+{
+	for (unsigned int i = 0; i < stream->count - 1; i++)
+		TokenPrint(stream->token[i]);
+}
+
+
+void TokenStreamTokensWrite(TokenStream *stream,FILE *fp)
+{
+	for (unsigned int i = 0; i < stream->count - 1; i++)
+		TokenWrite(stream->token[i],fp);
+}
+
+
+
+
 
 

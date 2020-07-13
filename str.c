@@ -53,7 +53,7 @@ int NumDigits(int n)
 
 
 
-char *ItoA(int number)
+char *IToA(int number)
 {
     char *dest = (char*)malloc(sizeof(char) * (NumDigits(number) + 1));
 	sprintf(dest,"%d",number);

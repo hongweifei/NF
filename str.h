@@ -15,7 +15,7 @@ void StrAddChar(char *str, int ch);
 
 
 int NumDigits(int n);//取数字个数
-char *ItoA(int number);//十进制
+char *IToA(int number);//十进制
 
 
 

@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "parse/lexer.h"
-#include "parse/str.h"
 
 
 int main(int argc,char *argv[])
@@ -17,34 +16,25 @@ int main(int argc,char *argv[])
 		FILE *fp = fopen(argv[1],"r");
 		if (fp != NULL)
 		{
+			/*
 			Token *token = NULL;
-			while ((token = GetNextToken(fp)) != NULL)
+			while ((token = GetToken(fp)) != NULL)
 			{
-				//printf("%s  %d\n", token->value, token->type);
 				TokenPrint(token);
-
-				fputs("Type:",log);
-				fputs(ItoA(token->type),log);
-				fputc('\n',log);
-
-				fputs("Value:",log);
-				fputs(token->value,log);
-				fputc('\n',log);
-
-				fputs("Line:",log);
-				fputs(ItoA(token->line),log);
-				fputc('\n',log);
-
-				fputs("Cols:",log);
-				fputs(ItoA(token->cols),log);
-				fputs("\n\n",log);
-
+				TokenWrite(token,log);
 				free(token);
 			}
+			*/
+
+			TokenStream *stream = Lex(fp);
+			TokenStreamTokensPrint(stream);
+			TokenStreamTokensWrite(stream,log);
 		}
 	}
 	else if (argc == 1)
 		printf("Please specify an input file.\n");
 	return 0;
 }
+
+
 

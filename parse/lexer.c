@@ -1,14 +1,14 @@
+﻿
 
-
-#include "str.h"
+#include "../str.h"
 #include "lexer.h"
 #include <stdlib.h>
 #include <string.h>
 
 
 FILE *using_fp = NULL;
-int line = 0;//行数
-int cols = 0;//列数
+int line = 1;//行数
+int cols = 1;//列数
 
 
 BOOL IsIdentifier(const char *str)
@@ -144,7 +144,7 @@ BOOL NextIsChineseCharacter(FILE *fp)
 */
 
 
-Token *GetNextToken(FILE *fp)
+Token *GetToken(FILE *fp)
 {
     TokenCode type = 0;
     char *value = (char*)calloc(1,sizeof(char));
@@ -153,8 +153,8 @@ Token *GetNextToken(FILE *fp)
     if(using_fp != fp)
     {
         using_fp = fp;
-        line = 0;
-        cols = 0;
+        line = 1;
+        cols = 1;
         fseek(fp,0L,SEEK_SET);
     }
 
@@ -179,12 +179,9 @@ Token *GetNextToken(FILE *fp)
         
         case '\n':
             line++;
-            cols = 0;
+            cols = 1;
             continue;
 
-        
-        case ';':
-            return TokenCreate(TK_SEMICOLON,";",line,cols);
         
         
         default:
@@ -216,7 +213,7 @@ Token *GetNextToken(FILE *fp)
             }
         }
         
-        return TokenCreate(TK_CSTR,value,line,cols);
+        return TokenCreate(TK_CSTR,value,line,cols - strlen(value));
     }
     
 
@@ -237,9 +234,7 @@ Token *GetNextToken(FILE *fp)
         if (ch == '.' && NextIsAppointString(fp,"..",FALSE))
         {
             cols += 2;
-            type = TK_ELLIPSIS;
-            StrAddChar(value,'.');
-            StrAddChar(value,'.');
+            return TokenCreate(TK_ELLIPSIS,"...",line,cols - strlen("..."));
         }
     
 
@@ -291,8 +286,9 @@ Token *GetNextToken(FILE *fp)
 
             break;
         }
+
         
-        return TokenCreate(type,value,line,cols);
+        return TokenCreate(type,value,line,cols - strlen(value));
     }
     
 
@@ -347,4 +343,26 @@ Token *GetNextToken(FILE *fp)
 
     return NULL;
 }
+
+
+
+
+TokenStream *Lex(FILE *fp)
+{
+    TokenStream *stream = TokenStreamInit();
+    Token *token = NULL;
+
+    do
+    {
+        token = GetToken(fp);
+        TokenStreamAppend(stream,token);
+    } while (token != NULL);
+    
+    return stream;
+}
+
+
+
+
+
 
