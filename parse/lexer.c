@@ -426,14 +426,16 @@ Token *GetToken(FILE *fp)
 TokenStream *Lex(FILE *fp)
 {
     TokenStream *stream = TokenStreamInit();
-    Token *token = NULL;
+    Token *token = GetToken(fp);
+
 
     do
     {
-        token = GetToken(fp);
         TokenStreamAppend(stream,token);
+        token = GetToken(fp);
     } while (token != NULL);
     
+
     return stream;
 }
 
