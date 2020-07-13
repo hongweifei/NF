@@ -191,34 +191,9 @@ Token *GetToken(FILE *fp)
         break;
     }
     
-    
-    if (ch == '\'' || ch == '\"')
-    {
-        char prev = ch;
-        while (1)
-        {
-            ch = fgetc(fp);
-            cols++;
-            if (ch == prev)
-                break;
-            
-            switch (ch)
-            {
-            case EOF:
-                return NULL;
-            
-            default:
-                StrAddChar(value,ch);
-                break;
-            }
-        }
-        
-        return TokenCreate(TK_CSTR,value,line,cols - strlen(value));
-    }
 
 
-
-    /*注释*/
+    //注释
     if (ch == '/')
     {
         char prev = ch;
@@ -226,7 +201,7 @@ Token *GetToken(FILE *fp)
         cols++;
 
 
-        /**单行注释*/
+        //单行注释
         if (ch == '/')
         {
             while (1)
@@ -246,7 +221,7 @@ Token *GetToken(FILE *fp)
         }
         else if (ch == '*')
         {
-            /**多行注释*/
+            //多行注释
             while (1)
             {
                 prev = ch;
@@ -276,6 +251,32 @@ Token *GetToken(FILE *fp)
         }
 
         
+    }
+
+
+    
+    if (ch == '\'' || ch == '\"')
+    {
+        char prev = ch;
+        while (1)
+        {
+            ch = fgetc(fp);
+            cols++;
+            if (ch == prev)
+                break;
+            
+            switch (ch)
+            {
+            case EOF:
+                return NULL;
+            
+            default:
+                StrAddChar(value,ch);
+                break;
+            }
+        }
+        
+        return TokenCreate(TK_CSTR,value,line,cols - strlen(value));
     }
     
 
