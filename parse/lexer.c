@@ -215,6 +215,68 @@ Token *GetToken(FILE *fp)
         
         return TokenCreate(TK_CSTR,value,line,cols - strlen(value));
     }
+
+
+
+    /*注释*/
+    if (ch == '/')
+    {
+        char prev = ch;
+        ch = fgetc(fp);
+        cols++;
+
+
+        /**单行注释*/
+        if (ch == '/')
+        {
+            while (1)
+            {
+                ch = fgetc(fp);
+                cols++;
+
+                if (ch == '\n')
+                {
+                    line++;
+                    cols = 1;
+                    break;
+                }
+                else if (ch == EOF)
+                    break;
+            }
+        }
+        else if (ch == '*')
+        {
+            /**多行注释*/
+            while (1)
+            {
+                prev = ch;
+                ch = fgetc(fp);
+                cols++;
+
+                if (prev == '*' && ch == '/')
+                    break;
+
+                switch (ch)
+                {
+                case EOF:
+                    return NULL;
+                
+                case '\n':
+                    line++;
+                    cols = 1;
+                    break;
+                }
+                
+            }
+        }
+        else
+        {
+            fseek(fp,-1L,SEEK_CUR);
+            cols--;
+        }
+
+        
+    }
     
 
     
@@ -231,6 +293,10 @@ Token *GetToken(FILE *fp)
         StrAddChar(value,ch);
 
 
+        if (ch == EOF)
+            return NULL;
+
+
         if (ch == '.' && NextIsAppointString(fp,"..",FALSE))
         {
             cols += 2;
@@ -245,6 +311,9 @@ Token *GetToken(FILE *fp)
 
             switch (ch)
             {
+            case EOF:
+                return NULL;
+
             case '='://==, >=, <=, !=
                 if (prev == '=' || prev == '!' || prev == '>' || prev == '<')
                     StrAddChar(value,ch);
@@ -292,7 +361,7 @@ Token *GetToken(FILE *fp)
     }
     
 
-
+    /**/
     if (IsLetter(ch) || ch == '_')
     {
         StrAddChar(value,ch);
@@ -301,7 +370,9 @@ Token *GetToken(FILE *fp)
             ch = fgetc(fp);
             cols++;
 
-            if (IsLetter(ch) || ch == '_')
+            if (ch == EOF)
+                return NULL;
+            else if (IsLetter(ch) || ch == '_')
             {
                 StrAddChar(value,ch);
             }
@@ -326,7 +397,9 @@ Token *GetToken(FILE *fp)
             ch = fgetc(fp);
             cols++;
 
-            if (IsDigit(ch) || ch == '.')
+            if (ch == EOF)
+                return NULL;
+            else if (IsDigit(ch) || ch == '.')
                 StrAddChar(value,ch);
             else
             {
@@ -338,6 +411,8 @@ Token *GetToken(FILE *fp)
         
         return TokenCreate(TK_CNUMBER,value,line,cols - strlen(value));
     }
+    
+
     
 
 

@@ -43,8 +43,9 @@ typedef enum
 
     TK_EOF = 0,             //文件结束符
 
-    /*标识符*/
+    /*标识符和注释*/
     TK_IDENT,       //标识符
+    TK_NOTES,       //注释
 
     /**/
     TK_CNUMBER,     //
