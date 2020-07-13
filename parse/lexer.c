@@ -429,11 +429,11 @@ TokenStream *Lex(FILE *fp)
     Token *token = GetToken(fp);
 
 
-    do
+    while (token != NULL)
     {
         TokenStreamAppend(stream,token);
         token = GetToken(fp);
-    } while (token != NULL);
+    }
     
 
     return stream;
