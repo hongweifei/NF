@@ -146,7 +146,7 @@ BOOL NextIsChineseCharacter(FILE *fp)
 
 Token *GetToken(FILE *fp)
 {
-    TokenCode type = 0;
+    TokenCode type = TK_NONE;
     char *value = (char*)calloc(1,sizeof(char));
 
 
@@ -193,6 +193,7 @@ Token *GetToken(FILE *fp)
     
 
 
+notes:
     //注释
     if (ch == '/')
     {
@@ -250,7 +251,7 @@ Token *GetToken(FILE *fp)
             cols--;
         }
 
-        
+        goto notes;
     }
 
 

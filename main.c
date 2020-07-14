@@ -14,19 +14,19 @@ int main(int argc,char *argv[])
 		//printf("%s\n",argv[1]);
 		FILE *log = fopen("./log.txt","w");
 		FILE *fp = fopen(argv[1],"r");
-		//Token *token = NULL;
+		
 		if (fp != NULL)
 		{
 			printf("Lex\n");
 
-
 			/*
-			while ((token = GetToken(fp)) != NULL)
+			Token *token = GetToken(fp);
+			while (token != NULL)
 			{
 				TokenPrint(token);
 				TokenWrite(token,log);
 				free(token);
-				token = NULL;
+				token = GetToken(fp);
 			}
 			*/
 			

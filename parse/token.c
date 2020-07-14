@@ -92,30 +92,42 @@ void TokenAddChar(Token* token, int ch)
 
 void TokenPrint(Token *token)
 {
-	printf("Type: %d\n",token->type);
-	printf("Value: %s\n",token->value);
-	printf("line: %d\n",token->line);
-	printf("cols: %d\n\n",token->cols);
+	if (token != NULL)
+	{
+		printf("Type: %d\n",token->type);
+
+		if (token->value != NULL)
+			printf("Value: %s\n",token->value);
+			
+		printf("line: %d\n",token->line);
+		printf("cols: %d\n\n",token->cols);
+	}
 }
 
 
 void TokenWrite(Token *token,FILE *fp)
 {
-	fputs("Type:",fp);
-	fputs(IToA(token->type),fp);
-	fputc('\n',fp);
+	if (token != NULL && fp != NULL)
+	{
+		fputs("Type:",fp);
+		fputs(IToA(token->type),fp);
+		fputc('\n',fp);
 
-	fputs("Value:",fp);
-	fputs(token->value,fp);
-	fputc('\n',fp);
+		if (token->value != NULL)
+		{
+			fputs("Value:",fp);
+			fputs(token->value,fp);
+			fputc('\n',fp);
+		}
 
-	fputs("Line:",fp);
-	fputs(IToA(token->line),fp);
-	fputc('\n',fp);
+		fputs("Line:",fp);
+		fputs(IToA(token->line),fp);
+		fputc('\n',fp);
 
-	fputs("Cols:",fp);
-	fputs(IToA(token->cols),fp);
-	fputs("\n\n",fp);
+		fputs("Cols:",fp);
+		fputs(IToA(token->cols),fp);
+		fputs("\n\n",fp);
+	}
 }
 
 
@@ -135,9 +147,12 @@ TokenStream *TokenStreamInit()
 
 void TokenStreamAppend(TokenStream *stream,Token *token)
 {
-	stream->count++;
-	stream->token = (Token**)realloc(stream->token,sizeof(Token*) * stream->count);
-	stream->token[stream->count - 1] = token;
+	if (token != NULL)
+	{
+		stream->count++;
+		stream->token = (Token**)realloc(stream->token,sizeof(Token*) * stream->count);
+		stream->token[stream->count - 1] = token;
+	}
 }
 
 
@@ -171,14 +186,14 @@ void TokenStreamTokenWrite(TokenStream *stream,unsigned int index,FILE *fp)
 
 void TokenStreamTokensPrint(TokenStream *stream)
 {
-	for (unsigned int i = 0; i < stream->count - 1; i++)
+	for (unsigned int i = 0; i < stream->count; i++)
 		TokenPrint(stream->token[i]);
 }
 
 
 void TokenStreamTokensWrite(TokenStream *stream,FILE *fp)
 {
-	for (unsigned int i = 0; i < stream->count - 1; i++)
+	for (unsigned int i = 0; i < stream->count; i++)
 		TokenWrite(stream->token[i],fp);
 }
 
